@@ -15,4 +15,8 @@ class DetailsViewModel(private val countryRepo: CountryRepository) : ViewModel()
             country.postValue(it)
         }
     }
+
+    fun toggleFavorite() {
+        // TODO
+    }
 }
