@@ -19,4 +19,7 @@ class LocalCountryRepository(private val context: Context,
         return countries
     }
 
+    override fun getCountry(countryCode: String): Country? =
+        getCountries().firstOrNull { it.countryCode == countryCode }
+
 }

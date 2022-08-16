@@ -12,6 +12,7 @@ import org.koin.dsl.module
 import timber.log.Timber
 import xyz.wim.dentrealitytask.data.CountryRepository
 import xyz.wim.dentrealitytask.data.LocalCountryRepository
+import xyz.wim.dentrealitytask.ui.details.DetailsViewModel
 import xyz.wim.dentrealitytask.ui.main.MainViewModel
 import xyz.wim.dentrealitytask.ui.map.MapViewModel
 
@@ -28,6 +29,7 @@ class DentRealityApplication : Application() {
             // MyViewModel ViewModel
             viewModel { MainViewModel() }
             viewModel { MapViewModel(get()) }
+            viewModel { DetailsViewModel(get()) }
             single<CountryRepository> { LocalCountryRepository(get(), get()) }
             single<Moshi> { Moshi.Builder()
                 .addLast(KotlinJsonAdapterFactory())

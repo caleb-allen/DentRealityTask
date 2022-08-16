@@ -1,17 +1,21 @@
 package xyz.wim.dentrealitytask.ui.map
 
+import android.R.attr.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.constraintlayout.widget.ConstraintSet.*
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import xyz.wim.dentrealitytask.R
 import xyz.wim.dentrealitytask.data.Country
+import xyz.wim.dentrealitytask.databinding.DetailsFragmentBinding
 import xyz.wim.dentrealitytask.databinding.MapFragmentBinding
+import xyz.wim.dentrealitytask.ui.details.DetailsFragment
+import kotlin.math.roundToInt
 
 
 class MapFragment : Fragment() {
@@ -70,21 +74,33 @@ class MapFragment : Fragment() {
     private fun createCountryView(country: Country) {
         Timber.d("Creating view for ${country.name}")
         val (pctX, pctY) = MapUtils.coordToPercent(country.latlng.last(), country.latlng.first())
+
         with(binding) {
+            val pixelX = pctX * mapContainer.width
+            val pixelY = pctY * mapContainer.height
+            Timber.d("Pixel coordinates: \n\tpixelX: $pixelX, pixelY: $pixelY")
+
             val countryView = layoutInflater.inflate(R.layout.map_view_item, mapContainer, false)
             countryView.id = View.generateViewId()
+            countryView.setOnClickListener {
+                // TODO this could be extracted to its own class which manages
+                //  fragments and navigation, initiated by events on a shared
+                //  event bus
+                activity?.let {
+                    it.supportFragmentManager.beginTransaction()
+//                        .
+                        .replace(R.id.container, DetailsFragment.newInstance(country.countryCode))
+                        .commitNow()
+                }
+            }
+
             mapContainer.addView(countryView)
-            val set = ConstraintSet()
-            set.clone(mapContainer);
 
+            countryView.updateLayoutParams<FrameLayout.LayoutParams> {
+                setMargins(pixelX.roundToInt(), pixelY.roundToInt(), 0, 0)
+            }
 
-            set.setHorizontalBias(countryView.id, pctX)
-            set.setVerticalBias(countryView.id, pctY)
-
-            // Apply the changes
-            set.applyTo(mapContainer)
             mapContainer.invalidate()
-//            root
         }
     }
 

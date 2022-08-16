@@ -2,13 +2,7 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:src="@drawable/ic_baseline_location_city_24"
-    app:layout_constraintWidth="24dp"
-    app:layout_constraintHeight="24dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    android:layout_width="0dp"
-    android:layout_height="0dp">
+    android:layout_width="24dp"
+    android:layout_height="24dp">
 
 </ImageView>
