@@ -1,9 +1,9 @@
 package xyz.wim.dentrealitytask.data
 
 interface CountryRepository {
-    fun getCountries(): List<Country>
+    suspend fun getCountries(): List<Country>
 
-    fun getCountry(countryCode: String): Country?
+    suspend fun getCountry(countryCode: String): Country?
 
     /**
      * Mark the country with [countryCode] as the user's favorite.

@@ -1,7 +1,6 @@
 package xyz.wim.dentrealitytask
 
 import android.app.Application
-import android.content.res.Resources
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.koin.android.ext.koin.androidContext

@@ -4,20 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import xyz.wim.dentrealitytask.data.Country
+import xyz.wim.dentrealitytask.await
 import xyz.wim.dentrealitytask.databinding.MapFragmentBinding
-import xyz.wim.dentrealitytask.ui.details.DetailsFragment
-import kotlin.math.roundToInt
 
 
 class MapFragment : Fragment() {
@@ -37,16 +34,20 @@ class MapFragment : Fragment() {
 
     private val vm: MapViewModel by viewModel()
 
+    private val mapChannel = Channel<GoogleMap>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = MapFragmentBinding.inflate(inflater, container, false)
-       val view = _binding!!.root
+        val view = _binding!!.root
         with(binding) {
             mapView.onCreate(savedInstanceState)
             mapView.getMapAsync {
-                // TODO fill in markers of countries
+                lifecycleScope.launch {
+                    mapChannel.send(it)
+                }
             }
         }
 
@@ -57,7 +58,28 @@ class MapFragment : Fragment() {
         vm.countries.observe(this) {
             Timber.d("Observing countries")
         }
-       super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            displayCountryMarkers()
+        }
+        super.onCreate(savedInstanceState)
+    }
+
+    private suspend fun displayCountryMarkers() {
+        val map = mapChannel.receive()
+        val countries = vm.countries.await()
+
+        for (country in countries) {
+            val latlng = LatLng(country.latlng[0], country.latlng[1])
+            map.addMarker(
+                MarkerOptions()
+                    .position(latlng)
+                    .title(country.name)
+            )
+        }
+        map.setOnMarkerClickListener {
+            Timber.d("Marker clicked: %s", it.title)
+            return@setOnMarkerClickListener true
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
