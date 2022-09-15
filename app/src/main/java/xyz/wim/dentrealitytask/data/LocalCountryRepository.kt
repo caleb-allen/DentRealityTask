@@ -14,12 +14,15 @@ class LocalCountryRepository(private val context: Context,
     override fun getCountries(): List<Country> {
         val json = context.resources.openRawResource(R.raw.countries).bufferedReader().use { it.readText() }
         val adapter = moshi.adapter<List<Country>>()
-//        Timber.d(json)
         val countries = adapter.fromJson(json)!!
         return countries
     }
 
     override fun getCountry(countryCode: String): Country? =
         getCountries().firstOrNull { it.countryCode == countryCode }
+
+    override fun setFavorite(countryCode: String?) {
+        TODO("Not yet implemented")
+    }
 
 }
