@@ -5,16 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import org.koin.androidx.scope.scope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import xyz.wim.dentrealitytask.R
 import xyz.wim.dentrealitytask.await
 import xyz.wim.dentrealitytask.databinding.MapFragmentBinding
+import xyz.wim.dentrealitytask.ui.details.DetailsFragment
 
 
 class MapFragment : Fragment() {
@@ -24,8 +29,6 @@ class MapFragment : Fragment() {
 
         private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
     }
-
-    private var root: View? = null
 
     private var _binding: MapFragmentBinding? = null
 
@@ -41,7 +44,11 @@ class MapFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = MapFragmentBinding.inflate(inflater, container, false)
-        val view = _binding!!.root
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                displayCountryMarkers()
+            }
+        }
         with(binding) {
             mapView.onCreate(savedInstanceState)
             mapView.getMapAsync {
@@ -51,15 +58,12 @@ class MapFragment : Fragment() {
             }
         }
 
-        return view
+        return _binding!!.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         vm.countries.observe(this) {
             Timber.d("Observing countries")
-        }
-        lifecycleScope.launch {
-            displayCountryMarkers()
         }
         super.onCreate(savedInstanceState)
     }
@@ -73,11 +77,17 @@ class MapFragment : Fragment() {
             map.addMarker(
                 MarkerOptions()
                     .position(latlng)
-                    .title(country.name)
+                    .title(country.countryCode)
             )
         }
-        map.setOnMarkerClickListener {
-            Timber.d("Marker clicked: %s", it.title)
+        map.setOnMarkerClickListener { marker ->
+            Timber.d("Marker clicked: %s", marker.title)
+            activity?.let { activity ->
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, DetailsFragment.newInstance(marker.title!!))
+                    .addToBackStack(null)
+                    .commit()
+            }
             return@setOnMarkerClickListener true
         }
     }
