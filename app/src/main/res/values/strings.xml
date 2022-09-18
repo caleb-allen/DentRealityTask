@@ -151,4 +151,8 @@
     }
 ]
     </string>
+    <string name="country_code">Country code</string>
+    <string name="name">Name</string>
+    <string name="timezones">Timezones</string>
+    <string name="capital">Capital</string>
 </resources>

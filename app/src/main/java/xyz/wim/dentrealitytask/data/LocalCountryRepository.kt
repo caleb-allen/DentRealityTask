@@ -18,7 +18,7 @@ class LocalCountryRepository(private val context: Context,
     override suspend fun getCountry(countryCode: String): Country? =
         getCountries().firstOrNull { it.countryCode == countryCode }
 
-    override fun setFavorite(countryCode: String?) {
+    override fun setHome(countryCode: String?) {
         TODO("Not yet implemented")
     }
 

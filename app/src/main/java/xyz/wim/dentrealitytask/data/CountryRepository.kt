@@ -13,5 +13,5 @@ interface CountryRepository {
      * @param countryCode the country code to be set as favorite. Passing null will
      * remove a previously set favorite, if any.
      */
-    fun setFavorite(countryCode: String?)
+    fun setHome(countryCode: String?)
 }
