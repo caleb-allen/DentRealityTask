@@ -1,8 +1,7 @@
 package xyz.wim.dentrealitytask
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import xyz.wim.dentrealitytask.ui.main.MainFragment
+import androidx.appcompat.app.AppCompatActivity
 import xyz.wim.dentrealitytask.ui.map.MapFragment
 
 class MainActivity : AppCompatActivity() {

@@ -1,46 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
     tools:context=".ui.details.DetailsFragment">
 
     <TextView
-        android:text="Country code"
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/img_home"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="United Kingdom" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/distance_label"
+        style="@style/country_details_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"/>
+        android:layout_marginTop="16dp"
+        android:text="@string/distance_from_x"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/distance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/barrier_half"
+        app:layout_constraintTop_toTopOf="@id/distance_label"
+        tools:text="321 km" />
+
+    <TextView
+        android:id="@+id/country_code_label"
+        style="@style/country_details_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/country_code"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/distance_label" />
+
+
     <TextView
         android:id="@+id/country_code"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:text="Name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textStyle="bold"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/barrier_half"
+        app:layout_constraintTop_toTopOf="@id/country_code_label"
+        tools:text="GB" />
+
     <TextView
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:text="Timezones"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"/>
+        android:id="@+id/timezones_label"
+        style="@style/country_details_label"
+        android:text="@string/timezones"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/country_code_label" />
+
     <TextView
         android:id="@+id/timezones"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        style="@style/country_details_values"
+        android:maxLines="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/barrier_half"
+        app:layout_constraintTop_toTopOf="@id/timezones_label"
+        tools:text="@tools:sample/lorem/random" />
+
     <TextView
-        android:text="Capital"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"/>
+        android:id="@+id/capital_label"
+        style="@style/country_details_label"
+        android:text="@string/capital"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timezones" />
+
     <TextView
         android:id="@+id/capital"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        style="@style/country_details_values"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/barrier_half"
+        app:layout_constraintTop_toTopOf="@id/capital_label"
+        tools:text="@tools:sample/cities" />
 
-</LinearLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_home"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/ic_baseline_home_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/name"
+        app:layout_constraintEnd_toStartOf="@id/name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/name"
+        app:layout_constraintWidth_max="44dp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_half"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:barrierDirection="end"
+        app:barrierMargin="34dp"
+        app:constraint_referenced_ids="capital_label,country_code_label,timezones_label,distance_label" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_home"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="Set as Home"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/capital" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
