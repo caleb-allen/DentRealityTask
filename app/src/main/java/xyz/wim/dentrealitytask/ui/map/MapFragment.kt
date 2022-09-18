@@ -99,7 +99,7 @@ class MapFragment : Fragment() {
             mapViewBundle = Bundle()
             outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle)
         }
-        binding.mapView.onSaveInstanceState(mapViewBundle)
+        _binding?.mapView?.onSaveInstanceState(mapViewBundle)
     }
 
     override fun onResume() {
