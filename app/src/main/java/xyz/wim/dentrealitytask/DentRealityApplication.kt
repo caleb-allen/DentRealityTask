@@ -10,6 +10,7 @@ import org.koin.core.context.GlobalContext.startKoin
 import org.koin.dsl.module
 import timber.log.Timber
 import xyz.wim.dentrealitytask.data.CountryRepository
+import xyz.wim.dentrealitytask.data.HomeManager
 import xyz.wim.dentrealitytask.data.LocalCountryRepository
 import xyz.wim.dentrealitytask.ui.details.DetailsViewModel
 import xyz.wim.dentrealitytask.ui.main.MainViewModel
@@ -22,17 +23,17 @@ class DentRealityApplication : Application() {
         Timber.plant(Timber.DebugTree())
         val appModule = module {
 
-//            single<HelloRepository> { HelloRepositoryImpl() }
-
-//            factory<Resources>{ androidContext()}
             // MyViewModel ViewModel
             viewModel { MainViewModel() }
             viewModel { MapViewModel(get()) }
-            viewModel { DetailsViewModel(get()) }
+            viewModel { DetailsViewModel(get(), get(), get()) }
+            single<HomeManager> { HomeManager(get(), get()) }
             single<CountryRepository> { LocalCountryRepository(get(), get()) }
-            single<Moshi> { Moshi.Builder()
-                .addLast(KotlinJsonAdapterFactory())
-                .build() }
+            single<Moshi> {
+                Moshi.Builder()
+                    .addLast(KotlinJsonAdapterFactory())
+                    .build()
+            }
         }
 
         startKoin {

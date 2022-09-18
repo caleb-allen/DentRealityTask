@@ -1,39 +1,35 @@
 package xyz.wim.dentrealitytask.ui.details
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 import xyz.wim.dentrealitytask.data.Country
 import xyz.wim.dentrealitytask.data.CountryRepository
-import kotlin.coroutines.coroutineContext
+import xyz.wim.dentrealitytask.data.HomeManager
 
-class DetailsViewModel(private val countryRepo: CountryRepository) : ViewModel() {
-    private val selectedCountry = Channel<Country>()
-    val country : LiveData<Country> = liveData {
-        while(coroutineContext.isActive){
-            val c = selectedCountry.receive()
-            emit(c)
-            yield()
+class DetailsViewModel(
+    private val countryCode: String,
+    private val countryRepo: CountryRepository,
+    private val homeManager: HomeManager
+) : ViewModel() {
+    val country: MutableLiveData<Country> = MutableLiveData()
+
+    val homeDetails: MutableLiveData<HomeManager.HomeDetails> = MutableLiveData()
+
+    fun getCountryDetails() {
+        viewModelScope.launch(Dispatchers.IO) {
+            country.postValue(countryRepo.getCountry(countryCode))
+            val homeDetails = homeManager.getHomeDetails(countryCode)
+            this@DetailsViewModel.homeDetails.postValue(homeDetails)
         }
     }
 
-    fun getCountryDetails(countryCode: String) {
-        viewModelScope.launch {
-            countryRepo.getCountry(countryCode)?.let {
-                selectedCountry.send(it)
-            } ?: kotlin.run {
-                error("Country details null. Attempted to get country with code %s"
-                    .format(countryCode))
-            }
+    fun setAsHome() {
+        country.value?.let {
+            homeManager.setHome(it.countryCode)
         }
-    }
-
-    fun toggleFavorite() {
-        // TODO
+        getCountryDetails()
     }
 }

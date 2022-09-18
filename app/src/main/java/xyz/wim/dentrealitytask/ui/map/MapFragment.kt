@@ -13,7 +13,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import org.koin.androidx.scope.scope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import xyz.wim.dentrealitytask.R
@@ -137,5 +136,4 @@ class MapFragment : Fragment() {
         super.onLowMemory()
         binding.mapView.onLowMemory()
     }
-
 }

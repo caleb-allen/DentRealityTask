@@ -9,3 +9,7 @@ data class Country(
     @Json(name = "country_code") val countryCode: String,
     val capital: String
 )
+
+
+fun Country.lat() = latlng[0]
+fun Country.lon() = latlng[1]
