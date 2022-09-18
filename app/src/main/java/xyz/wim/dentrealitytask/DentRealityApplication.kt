@@ -23,7 +23,6 @@ class DentRealityApplication : Application() {
         Timber.plant(Timber.DebugTree())
         val appModule = module {
 
-            // MyViewModel ViewModel
             viewModel { MainViewModel() }
             viewModel { MapViewModel(get()) }
             viewModel { DetailsViewModel(get(), get(), get()) }
